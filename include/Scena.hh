@@ -35,29 +35,57 @@
  PzG::LaczeDoGNUPlota  Lacze;
 
 /*!
- *\brief Numer aktywnego drona
+ *\brief Numer aktywnego drona.
  *Zmienna informuje o numerze aktywnego drona
  */
  int NrAktywnegoDrona;
 
  public:
 
+/*!
+ *\brief Konstruktor bezparametryczny sceny.
+ */
  Scena();
 
+/*!
+ *\brief Metoda dodajaca drona do sceny.
+ */
  void DodajDrona(int NrDrona, Wektor3D Polozenie, double Kat, std::string NazwaDrona);
 
+/*!
+ *\brief Metoda dodajaca do lacza gnuplot nazwe pliku z rysowana bryla.
+ */
  bool DodajNazwePliku(const char *NazwaPliku);
 
+/*!
+ *\brief Metoda uzyskujaca polozenie wybranego drona.
+ */
  Wektor3D PolozenieDrona(int NrDrona)const;
 
+/*!
+ *\brief Metoda uzyskujaca numer aktywnego drona.
+ */
  int NumerAktywnegoDrona()const;
 
+/*!
+ *\brief Metoda uzyskujaca dostep do numeru aktywnego drona.
+ */
  int& NumerAktywnegoDrona();
 
+/*!
+ *\brief Metoda uzyskujaca dostep do aktywnego drona.
+ */
  Dron& AktywnyDron();
 
+/*!
+ *\brief Metoda rysujaca trase, jaka drona bedzie sie przemieszczal.
+ */
  bool RysujTrase(double Odleglosc, double Kat);
 
+/*!
+ *\brief Metoda wyswietlajaca w sposob aniomowany obrot drona o zadany kat,
+ * oraz jego przelot o zadana odleglosc.
+ */
  bool PrzemiescDrona(double Odleglosc, double Kat);
  };
 

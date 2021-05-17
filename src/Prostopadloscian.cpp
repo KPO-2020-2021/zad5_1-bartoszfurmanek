@@ -10,10 +10,8 @@
 
 /*!
  * \brief Metoda służąca do indeksowania prostopadloscianu.
- * Argumenty:
- *   \param[in] Indeks - indeks zadanego wierzcholka prostopadloscianu.
- * Zwraca:
- *   \retval Wektor3D reprezentujacy dany wierzcholek prostopadloscianu,
+ *   \param[in] Indeks - indeks zadanego punktu prostopadloscianu.
+ *   \retval Wektor3D reprezentujacy dany punkt prostopadloscianu,
  */
 Wektor3D Prostopadloscian::operator [](int Indeks)const
 {
@@ -27,10 +25,8 @@ Wektor3D Prostopadloscian::operator [](int Indeks)const
 
 /*!
  * \brief Metoda służąca do indeksowania prostopadloscianu.
- * Argumenty:
- *   \param[in] Indeks - indeks zadanego wierzcholka prostopadloscianu.
- * Zwraca:
- *   \retval Wektor3D reprezentujacy dany wierzcholek prostopadloscianu,
+ *   \param[in] Indeks - indeks zadanego punktu prostopadloscianu.
+ *   \retval Wektor3D reprezentujacy dany punkt prostopadloscianu,
  */
 Wektor3D& Prostopadloscian::operator [](int Indeks)
 {
@@ -44,7 +40,6 @@ Wektor3D& Prostopadloscian::operator [](int Indeks)
 
 /*!
  * \brief Uzyskiwanie wspolrzednych polozenia prostopadloscianu.
- * Zwraca:
  *  \retval Wektor3D reprezentujacy polozenie prostopadloscianu.
  */
   Wektor3D Prostopadloscian::WspolPolozenia()const
@@ -54,7 +49,6 @@ Wektor3D& Prostopadloscian::operator [](int Indeks)
 
 /*!
  * \brief Uzyskiwanie wspolrzednych polozenia prostopadloscianu.
- * Zwraca:
  *  \retval referencja do Wektora3D reprezentującego polozenie prostopadloscianu.
  */
   Wektor3D& Prostopadloscian::WspolPolozenia()
@@ -64,8 +58,7 @@ Wektor3D& Prostopadloscian::operator [](int Indeks)
 
 /*!
  * \brief Uzyskiwanie katu orientacji prostopadloscianu.
- * Zwraca:
- *  \retval Wartosc kata orientacji prostopadloscianu.
+ * \retval Wartosc kata orientacji prostopadloscianu.
  */
   double Prostopadloscian::Orientacja()const
   {
@@ -74,8 +67,7 @@ Wektor3D& Prostopadloscian::operator [](int Indeks)
 
 /*!
  * \brief Uzyskiwanie katu orientacji polozenia prostopadloscianu.
- * Zwraca:
- *  \retval referencja do katu orientacji prostopadloscianu.
+ * \retval referencja do katu orientacji prostopadloscianu.
  */
   double& Prostopadloscian::Orientacja()
   {
@@ -114,7 +106,6 @@ Prostopadloscian::Prostopadloscian()
 
 /*!
  *\brief Konstruktor parametryczny prostopadloscianu.
- *Argumenty:
  *  \param[in] WspolPolozenia - Wspolrzedne polozenia srodka prostopadloscianu
  *  \param[in] Kat - Kat orientacji prostopadloscianu.
  *  \param[in] NazwaBryly - Nazwa prostopadloscianu.
@@ -125,7 +116,7 @@ Prostopadloscian::Prostopadloscian(Wektor3D WspolPolozenia, double Kat, std::str
 (*this).Obrot(Kat, 'z');
 (*this).Translacja(WspolPolozenia);
 KatOrientacji=Kat;
-while(KatOrientacji<= -360 || KatOrientacji >= 360)
+while(KatOrientacji<= -360 || KatOrientacji >= 360)     //Usuniecie okresowosci kata.
   {
     if(KatOrientacji<= -360)
     {
@@ -144,9 +135,7 @@ NazwaPlikuBryla=NazwaBryly + ".dat";
 
 /*!
  * \brief Metoda służąca do porownywania prostopadloscianow z dokladnoscia do 0,001.
- * Argumenty:
  *  \param[in] Pr - Prostopadloscian odniesienia.
- * Zwraca:
  *   \retval True, jeżeli prostopadlosciany są takie same.
  *   \retval False jeżeli prostopadlosciany sie roznia
  */
@@ -163,10 +152,8 @@ return true;
 /*!
  * \brief Metoda służąca do obrotu prostopadloscianu o zadany kat wokol osi x,y,z.
  * UWAGA: Metoda nie sprawdza czy podano poprawna os (mozliwe opcje to x,y oraz z).
- * Argumenty:
  *  \param[in] Kat - Kat obrotu.
  *  \param[in] Os - Os obrotu.
- * Zwraca:
  *   \retval Obrocony prostopadloscian.
  */
 Prostopadloscian& Prostopadloscian::Obrot(double Kat, char Os)
@@ -180,9 +167,7 @@ Prostopadloscian& Prostopadloscian::Obrot(double Kat, char Os)
 
 /*!
  * \brief Metoda służąca do przesuniecie prostopadloscianu o zadany wektor
- * Argumenty:
  *  \param[in] Wektor - Wektor przesuniecia.
- * Zwraca:
  *   \retval Przesuniety prostopadloscian.
  */
 Prostopadloscian& Prostopadloscian::Translacja(Wektor3D Wektor)
@@ -217,11 +202,10 @@ Prostopadloscian& Prostopadloscian::Translacja(Wektor3D Wektor)
 
 /*!
  * \brief Zapis wspolrzednych prostopadloscianu do strumienia.
- * Metoda służy do zapisu wspolrzednych wierzcholków prostopadloscianu do danego strumienia,
+ * Metoda służy do zapisu wspolrzednych  prostopadloscianu do danego strumienia,
  * w celu zapisu go do pliku, ktory bedzie rysowac gnuplot.
  * przy wykonywaniu rysunku.
- * Argumenty:
- *  \param[in] StrmWy - Strumien na ktory wierzcholki maja zostac wypisane.
+ *  \param[in] StrmWy - Strumien na ktory wspolrzedne maja zostac wypisane.
  */
 void Prostopadloscian::ZapisWspolrzednychDoStrumienia(std::ostream &StrmWy)const
 {
@@ -255,12 +239,10 @@ void Prostopadloscian::ZapisWspolrzednychDoStrumienia(std::ostream &StrmWy)const
 
 
 /*!
- *\brief Zapis wspolrzednych wiercholkow do pliku.
+ *\brief Zapis wspolrzednych  do pliku.
  * Funkcja służy do zapisu wspolrzednych prostopadloscianu od pliku w celu
- * narysowania i wyswietlenia go przez gnu-plot.
- * Argumenty: 
+ * narysowania i wyswietlenia go przez gnu-plot. 
  *  \param[in] sNazwaPliku - Nazwa pliku ktory ma przechowywac informacje o wierzcholkach
- * Zwraca:
  * \retval True - jeżeli zapis uda sie pomyslnie.
  * \retval False - jezeli zapis sie nie uda..
  */
@@ -280,9 +262,8 @@ bool Prostopadloscian::ZapisWspolrzednychDoPliku(const std::string sNazwaPliku)c
 
 
 /*!
- * \brief Odczyt wspolrzednych wierzcholkow prostopadloscianu ze strumienia.
+ * \brief Odczyt wspolrzednych  prostopadloscianu ze strumienia.
  * Metoda służy do odczytu wspolrzednych wierzcholków prostopadloscianu z danego strumienia.
- * Argumenty:
  *  \param[in] StrmWej - Strumien z ktorego wierzcholki maja zostac wczytane.
  */
 void Prostopadloscian::OdczytWspolrzednychDoStrumienia(std::istream &StrmWej)
@@ -309,10 +290,8 @@ StrmWej >> Wierzcholek[15];
 }
 
 /*!
- *\brief Odczyt wspolrzednych wiercholkow z pliku.
- * Argumenty: 
- *  \param[in] sNazwaPliku - Nazwa pliku ktory ma przechowywac informacje o wierzcholkach
- * Zwraca:
+ *\brief Odczyt wspolrzednych prostopadloscianu z pliku. 
+ * \param[in] sNazwaPliku - Nazwa pliku ktory ma przechowywac informacje o wierzcholkach
  * \retval True - jeżeli zapis uda sie pomyslnie.
  * \retval False - jezeli zapis sie nie uda..
  */
@@ -348,6 +327,9 @@ bool Prostopadloscian::OdczytWspolrzednychDoPliku(const std::string sNazwaPliku)
     (*this).OdczytWspolrzednychDoPliku("../BrylyWzorcowe/ProstopadloscianWzorcowy.dat");
   }
 
+/*!
+ *\brief Metoda zastepuje wspolrzedne, wspolrzednymi wzorca (Odpowiednio obrocony i przesuniety).
+ */
   void Prostopadloscian::UzyjWzorca()
   {
     (*this).OdczytajBryleWzorcowa();

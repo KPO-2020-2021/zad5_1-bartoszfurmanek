@@ -21,10 +21,13 @@
 /*!
  * \brief Klasa Prostopadloscian.
  *
- * Klasa reprezentucja prostopadlocian. Jego wierzcholki sa prezentowane przez
- * tablice wektorow 3D, gdzie jeden wektor to dany wierzcholek. prostopadloscian
- * mozna przesuwac oraz obracac. Kazdy prostopadloscian posiada  plik ze wspolrzednymi bryly,
- * oraz ze wspolrzednymi bryly wzorcowej.
+ * Klasa reprezentucja prostopadlocian. Jego punkty sa reprezentowane przez
+ * tablice wektorow 3D, gdzie jeden wektor to dany punkt. Prostopadloscian
+ * posiada zmienna informujaca o jego polozniu, oraz o koncie orietnacji
+ * wzgledem osi Z. Prostopadloscian mozna przesuwac oraz obracac. Kazdy 
+ * prostopadloscian posiada plik ze wspolrzednymi bryly, dostosowanych
+ * do rysowania w gnuplocie.
+ *
  */
 class Prostopadloscian {
 
@@ -138,7 +141,7 @@ class Prostopadloscian {
   void TransformujDoUkladuGlobalnego();
 
 /*!
- *\brief Zapis wspolrzednych wiercholkow do pliku.
+ *\brief Zapis wspolrzednych prostopadlocianu do pliku.
  */
   bool ZapisWspolrzednychDoPliku(const std::string sNazwaPliku)const;
 
@@ -148,12 +151,12 @@ class Prostopadloscian {
   void ZapisWspolrzednychDoStrumienia(std::ostream &StrmWy)const;
 
 /*!
- *\brief Odczyt wspolrzednych wiercholkow do pliku.
+ *\brief Odczyt wspolrzednych prostopadloscianu z pliku.
  */
   bool OdczytWspolrzednychDoPliku(const std::string sNazwaPliku);
 
 /*!
- * \brief Odczyt wspolrzednych prostopadloscianu do strumienia.
+ * \brief Odczyt wspolrzednych prostopadloscianu ze strumienia.
  */
   void OdczytWspolrzednychDoStrumienia(std::istream &StrmWej);
 
@@ -167,6 +170,9 @@ class Prostopadloscian {
  */
   void OdczytajBryleWzorcowa();
 
+/*!
+ *\brief Metoda zastepuje wspolrzedne, wspolrzednymi wzorca (Odpowiednio obrocony i przesuniety).
+ */
   void UzyjWzorca();
 
 

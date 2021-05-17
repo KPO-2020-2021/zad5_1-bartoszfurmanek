@@ -10,6 +10,7 @@
 #define MIN_ROZNICA 0.001
 
 
+
 /*!
  * \file
  * \brief Szablon klasy reprezentujacej wektor o dowlonym wymiarze.
@@ -89,6 +90,8 @@ class Wektor {
   
 };
 
+
+
 /*!
  * \brief Metoda służąca do indeksowania Wektora.
  * Argumenty:
@@ -140,6 +143,7 @@ for(double &Elem_i : Elem)
     Elem_i = 0;
     }
 }
+
 /*!
  * \brief Konstruktor parametryczny dla Wektora.
  *  Argumenty:
@@ -158,6 +162,8 @@ Wektor<Wymiar>::Wektor(const std::initializer_list<double> &ListaElem):Wektor<Wy
       Elem[++Indeks] = Elem_i;
     }
 }
+
+
 
 /*!
  * \brief Metoda służąca do dodawania wektorów.

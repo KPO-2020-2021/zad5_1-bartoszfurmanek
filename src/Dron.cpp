@@ -7,27 +7,48 @@
  *\brief Definicja metod dla klasy Dron.
  */
 
-
+/*!
+ *\brief Metoda uzyskujaca wektor3D reprezentujacy wspolrzedne polozenia drona.
+ *\retval Wektor3D reprezentujacy wspolrzedne polozenia drona.
+ */
 Wektor3D Dron::WspolPolozenia()const
 {
     return Polozenie;
 }
 
+/*!
+ *\brief Metoda uzyskujaca dostep do wektora3D reprezentujacego wspolrzedne polozenia drona.
+ *\retval referencja do Wektora3D reprezentujacego wspolrzedne polozenia drona.
+ */
 Wektor3D& Dron::WspolPolozenia()
 {
     return Polozenie;
 }
 
+/*!
+ *\brief Metoda uzyskujaca kat orientacji drona.
+ *\retval Wartosc kata orientacji drona.
+ */
 double Dron::Orientacja()const
 {
     return KatOrientacji;
 }
 
+/*!
+ *\brief Metoda uzyskujaca dostep do kata  orientacji drona.
+ *\retval referencja do wartosci kata orientacji drona.
+ */
 double& Dron::Orientacja()
 {
     return KatOrientacji;
 }
 
+
+/*!
+ *\brief Metoda obliczajaca wspolrzedne polozenia korupsu drona
+ * oraz jego rotortow. Za wspolrzedne polozenia calego drona 
+ * przyjmuje sie polozenie jego korpusu.
+ */
 void Dron::ObliczPolozenie()
 {
     Korpus.ObliczPolozenie();
@@ -38,6 +59,9 @@ void Dron::ObliczPolozenie()
     }
 }
 
+/*!
+ *\brief Konstruktor bezparametryczny drona.
+ */
 Dron::Dron()
 {
     Korpus = Prostopadloscian();
@@ -47,6 +71,14 @@ Dron::Dron()
     Rotor[3] = Graniastoslup();
 }
 
+/*!
+ *\brief Konstruktor parametryczny drona.
+ * Rotory drona, sa tworzone na podstawie wierzcholkow jego gornej
+ * podstawy.
+ *\param[in] PolozenieDrona - wspolrzedne polozenia korpusu drona.
+ *\param[in] Kat - kat orientacji korpusu drona.
+ *\param[in] Nazwa - nazwa drona.
+ */
 Dron::Dron(Wektor3D PolozenieDrona,double Kat, std::string Nazwa)
 {
     Korpus = Prostopadloscian(PolozenieDrona, Kat ,Nazwa + "_Korpus");
@@ -68,7 +100,9 @@ Dron::Dron(Wektor3D PolozenieDrona,double Kat, std::string Nazwa)
   }
     (*this).ObliczPolozenie();
 }
-
+/*!
+ *\brief Metoda zapisujaca korpus i rotory dron do plikow z ich brylami.
+ */
 void Dron::ZapiszBryly()
 {
     Korpus.ZapiszBryle();
@@ -78,6 +112,9 @@ void Dron::ZapiszBryly()
     Rotor[3].ZapiszBryle();
 }
 
+/*!
+ *\brief Metoda transformujaca drona do ukladu wspolrzednych jego korpusu.
+ */
 void Dron::TransformujDoUkladuRodzica()
 {
     Korpus.Translacja((-1*Polozenie));
@@ -92,6 +129,9 @@ void Dron::TransformujDoUkladuRodzica()
     Rotor[3].Obrot((KatOrientacji*-1),'z');
 }
 
+/*!
+ *\brief Metoda transformujaca drona do globalnego ukladu wspolrzednych
+ */
 void Dron::TransformujDoUkladuGlobalnego()
 {
     Korpus.Obrot((KatOrientacji),'z');
@@ -106,7 +146,12 @@ void Dron::TransformujDoUkladuGlobalnego()
     Rotor[3].Translacja((Polozenie));
 }
 
-
+/*!
+ *\brief Metoda obraca calego drona o zadany kat wzgledem osi Z korpusu.
+ * Metoda przeksztalca dron do wlasnego ukladu wspolrzednych, obraca go,
+ * a nastepnie przywraca do lokalnego ukladu wspolrzednych.
+ * \param[in] Kat - Kat obrotu drona.
+ */
 void Dron::Obrot(double Kat)
 {
     (*this).TransformujDoUkladuRodzica();
@@ -134,7 +179,11 @@ void Dron::Obrot(double Kat)
   }
 
 }
-
+/*!
+ *\brief Metoda podnosi drona na dana wysokosc.
+ *\param[in] Wysokosc - wysokosc na jaka drona ma zostac podniesiony
+ * wzgledem jego poprzedniej wysokosci.
+ */
 void Dron::Wzniesienie(double Wysokosc)
 {
     Wektor3D Przesuniecie{0,0,Wysokosc};
@@ -147,6 +196,11 @@ void Dron::Wzniesienie(double Wysokosc)
     (*this).ObliczPolozenie();
 }
 
+/*!
+ *\brief Metoda opuszcza drona o dana wysokosc.
+ *\param[in] Wysokosc - wysokosc o jaka drona ma zostac opuszczony
+ * wzgledem jego poprzedniej wysokosci.
+ */
 void Dron::Opadanie(double Wysokosc)
 {
     Wektor3D Przesuniecie{0,0,-Wysokosc};
@@ -159,6 +213,13 @@ void Dron::Opadanie(double Wysokosc)
     (*this).ObliczPolozenie();
 }
 
+/*!
+ *\brief Metoda obraca wygrany rotor o zadany kat wzgledem jego wlasnej osi Z.
+ * Metoda najpierw sprowadza rotor do jego wlasnego ukladu wspolrzednych, po czym
+ * obraca go, a nastepnie przywraca do globalnego ukladu wspolrzednych
+ *\param[in] Indeks - indeks wybranego rotora.
+ *\param[in] Kat - o jaki rotor ma zostac obrocony.
+ */
 void Dron::ObrotRotora(int Indeks, double Kat)
 {
     if(Indeks >=4)
@@ -187,7 +248,12 @@ void Dron::ObrotRotora(int Indeks, double Kat)
 
 }
 
-
+/*!
+ *\brief Metoda przemieszcza drona od zadana odleglosc.
+ * Przemieszczenie odbywa sie wzdloz prostej o takim samym kacie,
+ * jak kat orientacji.
+ *\param[in] Odleglosc - Dlugosc o jaka dron ma zostac przemieszczony.
+ */
 void Dron::Przemieszczenie(double Odleglosc)
 {
     Wektor3D Przesuniecie{Odleglosc,0,0};
@@ -200,7 +266,11 @@ void Dron::Przemieszczenie(double Odleglosc)
     (*this).ObliczPolozenie();
 }
     
-
+/*!
+ *\brief Metoda zastepuje bryly drona brylami wzorcowymi,
+ ktore zostaja odpowiednio przemieszczone i obroce, tak
+ aby zgadzaly sie z polozeniem aktualnego drona.
+ */
 void Dron::UzyjWzorca()
 {
     (*this).ObliczPolozenie();

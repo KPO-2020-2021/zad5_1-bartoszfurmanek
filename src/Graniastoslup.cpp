@@ -10,10 +10,8 @@
 
 /*!
  * \brief Metoda służąca do indeksowania graniastoslupu.
- * Argumenty:
- *   \param[in] Indeks - indeks zadanego wierzcholka graniastoslupu.
- * Zwraca:
- *   \retval Wektor3D reprezentujacy dany wierzcholek graniastoslupu.
+ *   \param[in] Indeks - indeks zadanego punktu graniastoslupu.
+ *   \retval Wektor3D reprezentujacy dany punkt graniastoslupu.
  */
 Wektor3D Graniastoslup::operator [](int Indeks)const
 {
@@ -27,10 +25,8 @@ Wektor3D Graniastoslup::operator [](int Indeks)const
 
 /*!
  * \brief Metoda służąca do indeksowania graniastoslupu.
- * Argumenty:
- *   \param[in] Indeks - indeks zadanego wierzcholka graniastoslupu.
- * Zwraca:
- *   \retval Wektor3D reprezentujacy dany wierzcholek graniastoslupu,
+ *   \param[in] Indeks - indeks zadanego punktu graniastoslupu.
+ *   \retval Wektor3D reprezentujacy dany punkt graniastoslupu,
  */
 Wektor3D& Graniastoslup::operator [](int Indeks)
 {
@@ -44,7 +40,6 @@ Wektor3D& Graniastoslup::operator [](int Indeks)
 
 /*!
  * \brief Uzyskiwanie wspolrzednych polozenia graniastoslupu.
- * Zwraca:
  *  \retval Wektor3D reprezentujacy polozenie graniastoslupu.
  */
   Wektor3D Graniastoslup::WspolPolozenia()const
@@ -54,7 +49,6 @@ Wektor3D& Graniastoslup::operator [](int Indeks)
 
 /*!
  * \brief Uzyskiwanie wspolrzednych polozenia graniastoslupu.
- * Zwraca:
  *  \retval referencja do Wektora3D reprezentującego polozenie graniastoslupu.
  */
   Wektor3D& Graniastoslup::WspolPolozenia()
@@ -64,7 +58,6 @@ Wektor3D& Graniastoslup::operator [](int Indeks)
 
 /*!
  * \brief Uzyskiwanie katu orientacji graniastoslupu.
- * Zwraca:
  *  \retval Wartosc kata orientacji graniastoslupu.
  */
   double Graniastoslup::Orientacja()const
@@ -74,7 +67,6 @@ Wektor3D& Graniastoslup::operator [](int Indeks)
 
 /*!
  * \brief Uzyskiwanie katu orientacji polozenia graniastoslupu.
- * Zwraca:
  *  \retval referencja do katu orientacji graniastoslupu.
  */
   double& Graniastoslup::Orientacja()
@@ -116,7 +108,6 @@ Graniastoslup::Graniastoslup()
 
 /*!
  *\brief Konstruktor parametryczny graniastoslupnu.
- *Argumenty:
  *  \param[in] WspolPolozenia - Wspolrzedna polozenia srodka podstawy graniastoslupa.
  *  \param[in] Kat - Kat orientacji graniastoslupu.
  *  \param[in] NazwaBryly - Nazwa graniastoslupu.
@@ -145,9 +136,7 @@ NazwaPlikuBryla=NazwaBryly + ".dat";
 
 /*!
  * \brief Metoda służąca do porownywania graniastoslupow z dokladnoscia do 0,001.
- * Argumenty:
  *  \param[in] Gr - Graniastoslup odniesienia.
- * Zwraca:
  *   \retval True, jeżeli graniastoslupy są takie same.
  *   \retval False jeżeli graniastoslupy sie roznia
  */
@@ -164,10 +153,8 @@ return true;
 /*!
  * \brief Metoda służąca do obrotu graniastoslupu o zadany kat wokol osi x,y,z.
  * UWAGA: Metoda nie sprawdza czy podano poprawna os (mozliwe opcje to x,y oraz z).
- * Argumenty:
  *  \param[in] Kat - Kat obrotu.
  *  \param[in] Os - Os obrotu.
- * Zwraca:
  *   \retval Obrocony graniastoslup.
  */
 Graniastoslup& Graniastoslup::Obrot(double Kat, char Os)
@@ -181,9 +168,7 @@ Graniastoslup& Graniastoslup::Obrot(double Kat, char Os)
 
 /*!
  * \brief Metoda służąca do przesuniecie graniastoslupu o zadany wektor
- * Argumenty:
  *  \param[in] Wektor - Wektor przesuniecia.
- * Zwraca:
  *   \retval Przesuniety graniastoslup.
  */
 Graniastoslup& Graniastoslup::Translacja(Wektor3D Wektor)
@@ -216,11 +201,11 @@ Graniastoslup& Graniastoslup::Translacja(Wektor3D Wektor)
 
 /*!
  * \brief Zapis wspolrzednych graniastoslupu do strumienia.
- * Metoda służy do zapisu wspolrzednych wierzcholków graniastoslupu do danego strumienia.
+ * Metoda służy do zapisu wspolrzednych graniastoslupu do danego strumienia.
  * Pierwsze wspolrzedne zostaja zapisane ponownie, aby zachowac ciaglosc
  * przy wykonywaniu rysunku.
  * Argumenty:
- *  \param[in] StrmWy - Strumien na ktory wierzcholki maja zostac wypisane.
+ *  \param[in] StrmWy - Strumien na ktory wspolrzedne maja zostac wypisane.
  */
 void Graniastoslup::ZapisWspolrzednychDoStrumienia(std::ostream &StrmWy)const
 {  
@@ -264,12 +249,10 @@ void Graniastoslup::ZapisWspolrzednychDoStrumienia(std::ostream &StrmWy)const
 
 
 /*!
- *\brief Zapis wspolrzednych wiercholkow do pliku.
- * Funkcja służy do zapisu wspolrzednych graniastoslupu od pliku w celu
+ *\brief Zapis wspolrzednych do pliku.
+ * Funkcja służy do zapisu wspolrzednych graniastoslupu do pliku w celu
  * narysowania i wyswietlenia go przez gnu-plot.
- * Argumenty: 
- *  \param[in] sNazwaPliku - Nazwa pliku ktory ma przechowywac informacje o wierzcholkach
- * Zwraca:
+ * \param[in] sNazwaPliku - Nazwa pliku ktory ma przechowywac informacje o wierzcholkach
  * \retval True - jeżeli zapis uda sie pomyslnie.
  * \retval False - jezeli zapis sie nie uda..
  */
@@ -289,10 +272,9 @@ bool Graniastoslup::ZapisWspolrzednychDoPliku(const std::string sNazwaPliku)cons
 
 
 /*!
- * \brief Odczyt wspolrzednych wierzcholkow graniastoslupu ze strumienia.
+ * \brief Odczyt wspolrzednych graniastoslupu ze strumienia.
  * Metoda służy do odczytu wspolrzednych wierzcholków graniastoslupu z danego strumienia.
- * Argumenty:
- *  \param[in] StrmWej - Strumien z ktorego wierzcholki maja zostac wczytane.
+ *  \param[in] StrmWej - Strumien z ktorego wspolrzedne maja zostac wczytane.
  */
 void Graniastoslup::OdczytWspolrzednychDoStrumienia(std::istream &StrmWej)
 {
@@ -328,12 +310,10 @@ StrmWej >> Wierzcholek[23];
 }
 
 /*!
- *\brief Odczyt wspolrzednych wiercholkow graniastoslupu z pliku.
- * Argumenty: 
- *  \param[in] sNazwaPliku - Nazwa pliku ktory ma przechowywac informacje o wierzcholkach
- * Zwraca:
+ *\brief Odczyt wspolrzednych graniastoslupu z pliku.
+ * \param[in] sNazwaPliku - Nazwa pliku ktory przechowuje wspolrzedne graniastoslupa
  * \retval True - jeżeli zapis uda sie pomyslnie.
- * \retval False - jezeli zapis sie nie uda..
+ * \retval False - jezeli zapis sie nie uda.
  */
 bool Graniastoslup::OdczytWspolrzednychDoPliku(const std::string sNazwaPliku)
 {
@@ -367,7 +347,9 @@ bool Graniastoslup::OdczytWspolrzednychDoPliku(const std::string sNazwaPliku)
     (*this).OdczytWspolrzednychDoPliku("../BrylyWzorcowe/GraniastoslupWzorcowy.dat");
   }
 
-
+/*!
+ *\brief Metoda zastepuje wspolrzedne, wspolrzednymi wzorca (Odpowiednio obrocony i przesuniety).
+ */
   void Graniastoslup::UzyjWzorca()
   {
     (*this).OdczytajBryleWzorcowa();

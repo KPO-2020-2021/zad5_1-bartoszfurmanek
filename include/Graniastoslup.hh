@@ -21,18 +21,24 @@
 /*!
  * \brief Klasa Graniastoslup.
  *
- * Klasa reprezentucja graniastoslup. Jego wierzcholki sa prezentowane przez
- * tablice wektorow 3D, gdzie jeden wektor to dany wierzcholek. graniastoslup
- * mozna przesuwac oraz obracac. Kazdy graniastoslup posiada 2 pliki ze wspolrzednymi bryly,
- * oraz ze wspolrzednymi bryly wzorcowej.
+ * Klasa reprezentucja granistoslup szesciokatny prawidlowy. 
+ * Jego punkty sa reprezentowane przez tablice wektorow 3D, gdzie jeden 
+ * wektor to dany punkt. Prostopadloscian posiada zmienna informujaca 
+ * o jego polozniu, oraz o koncie orietnacji wzgledem osi Z. 
+ * Prostopadloscian mozna przesuwac oraz obracac. Kazdy prostopadloscian 
+ * posiada plik ze wspolrzednymi bryly, dostosowanych do rysowania w gnuplocie.
  */
 class Graniastoslup {
 
 /*!
  * \brief Wierzcholki
  *
- * Atrybut modeluje 12 wierzcholkow granistoslupa w formie
- * tablicy z wektorami 3D.
+ * Atrybut modeluje 12 wierzcholkow prostopadloscianu oraz 12 dodatkowych
+ * punktow, ktore sluza do rysowania scian prostopadloscianu
+ * w gnuplocie. Wierzcholki i punkty sa przedstawione w formie tablicy
+ * wektorow3D. Elementy o indeksach 1,2,5,6,9,10,13,14,17,18,21,22 reczywistymi wierzcholkami
+ * prostopadloscianu, pozostale elemnty to punkty dodatkowe wspomagajace rysowanie scian
+ * w gnuplocie.
  *
  */
   Wektor3D Wierzcholek[24];
@@ -64,12 +70,12 @@ class Graniastoslup {
   public:
 
 /*!
- * \brief Indeksowanie wierzcholkow graniastoslupa.
+ * \brief Indeksowanie wspolrzednych graniastoslupa.
  */
   Wektor3D operator[](int Indeks)const;
 
 /*!
- * \brief Indeksowanie wierzcholkow graniastoslupa.
+ * \brief Indeksowanie wspolrzednych graniastoslupa.
  */
   Wektor3D& operator[](int Indeks);
 
@@ -135,22 +141,22 @@ class Graniastoslup {
   void TransformujDoUkladuGlobalnego();
 
 /*!
- *\brief Zapis wspolrzednych wiercholkow do pliku.
+ *\brief Zapis wspolrzednych do pliku.
  */
   bool ZapisWspolrzednychDoPliku(const std::string sNazwaPliku)const;
 
 /*!
- * \brief Zapis wspolrzednych  do strumienia.
+ * \brief Zapis wspolrzednych do strumienia.
  */
   void ZapisWspolrzednychDoStrumienia(std::ostream &StrmWy)const;
 
 /*!
- *\brief Odczyt wspolrzednych wiercholkow do pliku.
+ *\brief Odczyt wspolrzednych do pliku.
  */
   bool OdczytWspolrzednychDoPliku(const std::string sNazwaPliku);
 
 /*!
- * \brief Odczyt wspolrzednych woercholkow do strumienia.
+ * \brief Odczyt wspolrzednych ze strumienia.
  */
   void OdczytWspolrzednychDoStrumienia(std::istream &StrmWej);
 
@@ -164,6 +170,9 @@ class Graniastoslup {
  */
   void OdczytajBryleWzorcowa();
 
+/*!
+ *\brief Metoda zastepuje wspolrzedne, wspolrzednymi wzorca (Odpowiednio obrocony i przesuniety).
+ */
   void UzyjWzorca();
 
 
