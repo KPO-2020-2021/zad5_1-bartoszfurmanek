@@ -163,17 +163,17 @@ class Graniastoslup {
 /*!
  * \brief Metoda zapisuje wspolrzedne graniastoslupa do pliku
  */
-  void ZapiszBryle()const;
+  bool ZapiszBryle()const;
 
 /*!
  * \brief Metoda odczytuje wspolrzedne graniastloslupa z pliku ze wzorcem bryly.
  */
-  void OdczytajBryleWzorcowa();
+  bool OdczytajBryleWzorcowa();
 
 /*!
  *\brief Metoda zastepuje wspolrzedne, wspolrzednymi wzorca (Odpowiednio obrocony i przesuniety).
  */
-  void UzyjWzorca();
+  bool UzyjWzorca();
 
 
 };

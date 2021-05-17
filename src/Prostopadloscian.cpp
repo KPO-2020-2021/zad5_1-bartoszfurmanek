@@ -293,7 +293,7 @@ StrmWej >> Wierzcholek[15];
  *\brief Odczyt wspolrzednych prostopadloscianu z pliku. 
  * \param[in] sNazwaPliku - Nazwa pliku ktory ma przechowywac informacje o wierzcholkach
  * \retval True - jeżeli zapis uda sie pomyslnie.
- * \retval False - jezeli zapis sie nie uda..
+ * \retval False - jezeli zapis sie nie uda.
  */
 bool Prostopadloscian::OdczytWspolrzednychDoPliku(const std::string sNazwaPliku)
 {
@@ -312,29 +312,47 @@ bool Prostopadloscian::OdczytWspolrzednychDoPliku(const std::string sNazwaPliku)
 
 /*!
  * \brief Metoda zapisuje wspolrzedne prostopadloscianu do pliku
+ * \retval True - jeżeli zapis uda sie pomyslnie.
+ * \retval False - jezeli zapis sie nie uda.
  */
-  void Prostopadloscian::ZapiszBryle()const
+  bool Prostopadloscian::ZapiszBryle()const
   {
-    (*this).ZapisWspolrzednychDoPliku("../data/"+NazwaPlikuBryla);
+    if(!(*this).ZapisWspolrzednychDoPliku("../data/"+NazwaPlikuBryla))
+      {
+      return false;
+      }
+    return true;
   }
 
 
 /*!
  * \brief Metoda odczytuje wspolrzedne prostopadloscianu z pliku ze wzorcem prostopadloscianu.
+ * \retval True - jeżeli odczyt uda sie pomyslnie.
+ * \retval False - jezeli odczyt sie nie uda.
  */
-  void Prostopadloscian::OdczytajBryleWzorcowa()
+  bool Prostopadloscian::OdczytajBryleWzorcowa()
   {
-    (*this).OdczytWspolrzednychDoPliku("../BrylyWzorcowe/ProstopadloscianWzorcowy.dat");
+    if(!(*this).OdczytWspolrzednychDoPliku("../BrylyWzorcowe/ProstopadloscianWzorcowy.dat"))
+      {
+      return false;
+      }
+    return true;
   }
 
 /*!
  *\brief Metoda zastepuje wspolrzedne, wspolrzednymi wzorca (Odpowiednio obrocony i przesuniety).
+  * \retval True - jeżeli odczyt wzorca uda sie pomyslnie.
+ * \retval False - jezeli odczyt wzorca sie nie uda.
  */
-  void Prostopadloscian::UzyjWzorca()
+  bool Prostopadloscian::UzyjWzorca()
   {
-    (*this).OdczytajBryleWzorcowa();
+    if(!(*this).OdczytajBryleWzorcowa())
+      {
+      return false;
+      }
     (*this).Obrot(KatOrientacji, 'z');
     (*this).Translacja(Polozenie);
+    return true;
   }
 
 

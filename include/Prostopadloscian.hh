@@ -163,17 +163,17 @@ class Prostopadloscian {
 /*!
  * \brief Metoda zapisuje wspolrzedne prostopadloscianu do pliku
  */
-  void ZapiszBryle()const;
+  bool ZapiszBryle()const;
 
 /*!
  * \brief Metoda odczytuje wspolrzedne prostopadloscianu z pliku ze wzorcem prostopadloscianu.
  */
-  void OdczytajBryleWzorcowa();
+  bool OdczytajBryleWzorcowa();
 
 /*!
  *\brief Metoda zastepuje wspolrzedne, wspolrzednymi wzorca (Odpowiednio obrocony i przesuniety).
  */
-  void UzyjWzorca();
+  bool UzyjWzorca();
 
 
 };

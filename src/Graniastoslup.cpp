@@ -332,29 +332,47 @@ bool Graniastoslup::OdczytWspolrzednychDoPliku(const std::string sNazwaPliku)
 
 /*!
  * \brief Metoda zapisuje wspolrzedne graniastoslupu do pliku
+ * \retval True - jeżeli zapis uda sie pomyslnie.
+ * \retval False - jezeli zapis sie nie uda.
  */
-  void Graniastoslup::ZapiszBryle()const
+  bool Graniastoslup::ZapiszBryle()const
   {
-    (*this).ZapisWspolrzednychDoPliku("../data/"+NazwaPlikuBryla);
+    if(!(*this).ZapisWspolrzednychDoPliku("../data/"+NazwaPlikuBryla))
+      {
+      return false;
+      }
+    return true;
   }
 
 
 /*!
  * \brief Metoda odczytuje wspolrzedne graniastoslupu z pliku ze wzorcem graniastoslupu.
+* \retval True - jeżeli odczyt uda sie pomyslnie.
+ * \retval False - jezeli odczyt sie nie uda.
  */
-  void Graniastoslup::OdczytajBryleWzorcowa()
+  bool Graniastoslup::OdczytajBryleWzorcowa()
   {
-    (*this).OdczytWspolrzednychDoPliku("../BrylyWzorcowe/GraniastoslupWzorcowy.dat");
+    if(!(*this).OdczytWspolrzednychDoPliku("../BrylyWzorcowe/GraniastoslupWzorcowy.dat"))
+      {
+      return false;
+      }
+    return true;
   }
 
 /*!
  *\brief Metoda zastepuje wspolrzedne, wspolrzednymi wzorca (Odpowiednio obrocony i przesuniety).
+ * \retval True - jeżeli odczyt wzorca uda sie pomyslnie.
+ * \retval False - jezeli odczyt wzorca sie nie uda.
  */
-  void Graniastoslup::UzyjWzorca()
+  bool Graniastoslup::UzyjWzorca()
   {
-    (*this).OdczytajBryleWzorcowa();
+    if(!(*this).OdczytajBryleWzorcowa())
+      {
+      return false;
+      }
     (*this).Obrot(KatOrientacji, 'z');
     (*this).Translacja(Polozenie);
+    return true;
   }
 
 

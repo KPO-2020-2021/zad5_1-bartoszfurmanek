@@ -163,11 +163,17 @@ bool Scena::PrzemiescDrona(double Odleglosc, double Kat)
             (*this).AktywnyDron().ObrotRotora(1,-10);
             (*this).AktywnyDron().ObrotRotora(2,-10);
             (*this).AktywnyDron().ObrotRotora(3,10);
-            (*this).AktywnyDron().ZapiszBryly();
+            if(!(*this).AktywnyDron().ZapiszBryly())
+                {
+                return false;
+                }
             Lacze.Rysuj();
             usleep(40000);
             }
-        (*this).AktywnyDron().UzyjWzorca();
+        if(!(*this).AktywnyDron().UzyjWzorca())
+            {
+            return false;
+            }
 
 
         std::cout << std::endl << "Obrot drona..."  << std::endl;       //Obrot drona;
@@ -185,11 +191,17 @@ bool Scena::PrzemiescDrona(double Odleglosc, double Kat)
             (*this).AktywnyDron().ObrotRotora(1,-10);
             (*this).AktywnyDron().ObrotRotora(2,-10);
             (*this).AktywnyDron().ObrotRotora(3,10);
-            (*this).AktywnyDron().ZapiszBryly();
+            if(!(*this).AktywnyDron().ZapiszBryly())
+                {
+                return false;
+                }
             Lacze.Rysuj();
             usleep(40000);
             }
-        (*this).AktywnyDron().UzyjWzorca();
+        if(!(*this).AktywnyDron().UzyjWzorca())
+            {
+            return false;
+            }
 
         std::cout << std::endl << "Lot Drona..."  << std::endl;       //Lot drona;
         for(i=0; i<Odleglosc; i++)
@@ -199,11 +211,17 @@ bool Scena::PrzemiescDrona(double Odleglosc, double Kat)
             (*this).AktywnyDron().ObrotRotora(1,-10);
             (*this).AktywnyDron().ObrotRotora(2,-10);
             (*this).AktywnyDron().ObrotRotora(3,10);
-            (*this).AktywnyDron().ZapiszBryly();
+            if(!(*this).AktywnyDron().ZapiszBryly())
+                {
+                return false;
+                }
             Lacze.Rysuj();
             usleep(40000);
             }
-        (*this).AktywnyDron().UzyjWzorca();
+        if(!(*this).AktywnyDron().UzyjWzorca())
+            {
+            return false;
+            }
 
         std::cout << std::endl << "Opadanie drona..." << std::endl;  //Opadanie
         for(i=0; i<60; i++)
@@ -213,11 +231,17 @@ bool Scena::PrzemiescDrona(double Odleglosc, double Kat)
             (*this).AktywnyDron().ObrotRotora(1,-10);
             (*this).AktywnyDron().ObrotRotora(2,-10);
             (*this).AktywnyDron().ObrotRotora(3,10);
-            (*this).AktywnyDron().ZapiszBryly();
+            if(!(*this).AktywnyDron().ZapiszBryly())
+                {
+                return false;
+                }
             Lacze.Rysuj();
             usleep(40000);
             }
-        (*this).AktywnyDron().UzyjWzorca();
+        if(!(*this).AktywnyDron().UzyjWzorca())
+            {
+            return false;
+            }
 
         std::cout<< std::endl << "Usuwanie trasy..." << std::endl;     //Usuwanie trasy
         Lacze.UsunOstatniaNazwe();

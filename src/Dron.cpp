@@ -102,14 +102,25 @@ Dron::Dron(Wektor3D PolozenieDrona,double Kat, std::string Nazwa)
 }
 /*!
  *\brief Metoda zapisujaca korpus i rotory dron do plikow z ich brylami.
+ * \retval True - jeżeli zapis uda sie pomyslnie.
+ * \retval False - jezeli zapis ktorejs z bryl sie nie uda
  */
-void Dron::ZapiszBryly()
+bool Dron::ZapiszBryly()
 {
-    Korpus.ZapiszBryle();
-    Rotor[0].ZapiszBryle();
-    Rotor[1].ZapiszBryle();
-    Rotor[2].ZapiszBryle();
-    Rotor[3].ZapiszBryle();
+    if(!Korpus.ZapiszBryle())
+        {
+        throw std::runtime_error("Odczyt plikow sie nie powiodl");   
+        return false;
+        }
+    for(int i=0; i<4; i++)
+        {
+        if(!Rotor[i].ZapiszBryle())
+            {
+            throw std::runtime_error("Odczyt plikow sie nie powiodl");    
+            return false;
+            }
+        }
+    return true;
 }
 
 /*!
@@ -270,14 +281,25 @@ void Dron::Przemieszczenie(double Odleglosc)
  *\brief Metoda zastepuje bryly drona brylami wzorcowymi,
  ktore zostaja odpowiednio przemieszczone i obroce, tak
  aby zgadzaly sie z polozeniem aktualnego drona.
+ * \retval True - jeżeli oczyt uda sie pomyslnie.
+ * \retval False - jezeli odczyt ktorejs z bryl sie nie uda
  */
-void Dron::UzyjWzorca()
+bool Dron::UzyjWzorca()
 {
     (*this).ObliczPolozenie();
-    Korpus.UzyjWzorca();
-    Rotor[0].UzyjWzorca();
-    Rotor[1].UzyjWzorca();
-    Rotor[2].UzyjWzorca();
-    Rotor[3].UzyjWzorca();
+    if(!Korpus.UzyjWzorca())
+        {
+        throw std::runtime_error("Odczyt plikow sie nie powiodl");
+        return false;
+        }
+    for(int i=0; i<4; i++)
+        {
+        if(!Rotor[i].UzyjWzorca())
+            {
+            throw std::runtime_error("Odczyt plikow sie nie powiodl");
+            return false;
+            }
+        }
     (*this).ZapiszBryly();
+    return true;
 }
