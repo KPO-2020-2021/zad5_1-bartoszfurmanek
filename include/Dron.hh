@@ -103,7 +103,7 @@ Dron(Wektor3D WspolPolozenie,double Kat, std::string Nazwa);
 /*!
  *\brief Metoda zapisujaca wspolrzedne korpusu i rotorow do plikow z ich brylami.
  */
-bool ZapiszBryly();
+bool ZapiszBryly()const;
 
 /*!
  *\brief Metoda obracajaca dron o zadany kat wzgledem wlasnej osi Z.

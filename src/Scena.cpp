@@ -227,16 +227,16 @@ bool Scena::PrzemiescDrona(double Odleglosc, double Kat)
         for(i=0; i<60; i++)
             {
             (*this).AktywnyDron().Opadanie(1);
-            (*this).AktywnyDron().ObrotRotora(0,10);
-            (*this).AktywnyDron().ObrotRotora(1,-10);
-            (*this).AktywnyDron().ObrotRotora(2,-10);
-            (*this).AktywnyDron().ObrotRotora(3,10);
+            (*this).AktywnyDron().ObrotRotora(0,7.5);
+            (*this).AktywnyDron().ObrotRotora(1,-7.5);
+            (*this).AktywnyDron().ObrotRotora(2,-7.5);
+            (*this).AktywnyDron().ObrotRotora(3,7.5);
             if(!(*this).AktywnyDron().ZapiszBryly())
                 {
                 return false;
                 }
             Lacze.Rysuj();
-            usleep(40000);
+            usleep(60000);
             }
         if(!(*this).AktywnyDron().UzyjWzorca())
             {

@@ -105,7 +105,7 @@ Dron::Dron(Wektor3D PolozenieDrona,double Kat, std::string Nazwa)
  * \retval True - jeżeli zapis uda sie pomyslnie.
  * \retval False - jezeli zapis ktorejs z bryl sie nie uda
  */
-bool Dron::ZapiszBryly()
+bool Dron::ZapiszBryly()const
 {
     if(!Korpus.ZapiszBryle())
         {

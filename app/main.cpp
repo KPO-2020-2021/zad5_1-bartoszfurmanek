@@ -62,11 +62,6 @@ int main() {
     
     while(1)
       {
-        /*
-        std::cout << std::endl;
-        std::cout << "Aktualna ilosc wektorow3D: " << AktualnaIloscWektorow << std::endl;
-        std::cout << "Ogolna ilosc wektorow3D: " << OgolnaIloscWektorow << std::endl;
-        std::cout << std::endl;*/
         std::cout << std::endl << "Twoj wybor (m - menu) -> ";
         std::cin >> Opcja;
         switch(Opcja)
@@ -117,6 +112,17 @@ int main() {
             std::cin >> Odleglosc;
             std::cout << std::endl;
 
+            while(Kat<=-360 || Kat>=360)            //Usuniecie okresow kata
+              {
+              if(Kat<=-360)
+                {
+                Kat+=360;
+                }
+              if(Kat>=360)
+                {
+                Kat-=360;
+                }    
+              }
             Sc.PrzemiescDrona(Odleglosc, Kat);
             break;
             }
