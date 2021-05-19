@@ -1,6 +1,8 @@
 #ifndef WEKTOR_HH
 #define WEKTOR_HH
 
+
+
 #include <iostream>
 #include <tgmath.h>
 #include <math.h>
@@ -8,8 +10,6 @@
 
 
 #define MIN_ROZNICA 0.001
-
-
 
 /*!
  * \file
@@ -36,6 +36,9 @@ class Wektor {
  */
   double Elem[Wymiar];
 
+  static int IloscAktualna;
+  static int IloscOgolna;
+
   public:
 
 /*!
@@ -49,14 +52,31 @@ class Wektor {
   double& operator[](int Indeks);
 
 /*!
+ * \brief Metoda zwracajaca aktualna ilosc wektorow
+ */
+  static int WezIloscAktualna()
+  {return IloscAktualna;}
+
+/*!
+ * \brief Metoda zwracajaca ogolna ilosc wektorow
+ */
+  static int WezIloscOgolna()
+  {return IloscOgolna;}
+
+/*!
  * \brief Konstruktor bezparametryczny dla wektora
  */
   Wektor();
 
-  /*!
+/*!
  * \brief Konstruktor parametryczny dla wektora
  */
   Wektor(const std::initializer_list<double> &ListaElem);
+
+/*!
+ * \brief Destruktor dla wektora
+ */
+  ~Wektor();
 
  /*!
  * \brief Przeciazenie operatora dodawania dla wektorow
@@ -87,10 +107,21 @@ class Wektor {
  * \brief Metoda wyliczajaca odleglosc miedzy dwoma wektorami
  */
   double Odleglosc(Wektor W)const;
-  
 };
 
+/*!
+ * \brief Metoda zwracajaca ogolna ilosc wektorow.
+ * \retval aktualna ogolna wektorow.
+ */
+template<int Wymiar>
+int Wektor<Wymiar>::IloscOgolna=0;
 
+/*!
+ * \brief Metoda zwracajaca aktualna ilosc wektorow.
+ * \retval aktualna ilosc wektorow.
+ */
+template<int Wymiar>
+int Wektor<Wymiar>::IloscAktualna=0;
 
 /*!
  * \brief Metoda służąca do indeksowania Wektora.
@@ -142,6 +173,8 @@ for(double &Elem_i : Elem)
     {
     Elem_i = 0;
     }
+++IloscAktualna;
+++IloscOgolna;
 }
 
 /*!
@@ -161,9 +194,18 @@ Wektor<Wymiar>::Wektor(const std::initializer_list<double> &ListaElem):Wektor<Wy
     {
       Elem[++Indeks] = Elem_i;
     }
+++IloscAktualna;
+++IloscOgolna;
 }
 
-
+/*!
+ * \brief Destruktor dla wektora
+ */
+template<int Wymiar>
+Wektor<Wymiar>::~Wektor()
+{
+--IloscAktualna;
+}
 
 /*!
  * \brief Metoda służąca do dodawania wektorów.

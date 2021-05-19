@@ -7,6 +7,8 @@
 
 #define ILOSC_DRONOW 2
 
+
+
 /*!
  *\file
  *\brief Plik zawiera definicje klasy Scena

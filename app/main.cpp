@@ -16,9 +16,6 @@
 
 #include "Dron.hh"
 
- int AktualnaIloscWektorow=0;
-
- int OgolnaIloscWektorow=0;
 
 
 int main() {
@@ -62,6 +59,8 @@ int main() {
     
     while(1)
       {
+        std::cout << std::endl << "Aktualna ilosc wektorow: " << Wektor3D::WezIloscAktualna() << std::endl;
+        std::cout << "Ogolna Ilosc wektorow: " << Wektor3D::WezIloscOgolna() << std::endl;
         std::cout << std::endl << "Twoj wybor (m - menu) -> ";
         std::cin >> Opcja;
         switch(Opcja)
