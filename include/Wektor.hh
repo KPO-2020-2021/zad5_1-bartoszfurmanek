@@ -74,9 +74,19 @@ class Wektor {
   Wektor(const std::initializer_list<double> &ListaElem);
 
 /*!
+ * \brief Konstruktor kopiujacy dla wektora
+ */
+  Wektor(const Wektor &W);
+
+/*!
  * \brief Destruktor dla wektora
  */
   ~Wektor();
+
+/*!
+ * \brief Przeciazenie operatora przyrownania dla wektora
+ */
+  Wektor& operator= (const Wektor W);
 
  /*!
  * \brief Przeciazenie operatora dodawania dla wektorow
@@ -165,6 +175,7 @@ else
 
 /*!
  * \brief Konstruktor bezparametryczny dla Wektora.
+ * \param[in] W - Wektor ktory ma zostac skopiowany.
  */
 template<int Wymiar>
 Wektor<Wymiar>::Wektor()
@@ -199,12 +210,40 @@ Wektor<Wymiar>::Wektor(const std::initializer_list<double> &ListaElem):Wektor<Wy
 }
 
 /*!
+ * \brief Konstruktor kopiujacy dla wektora
+ */
+template<int Wymiar>
+Wektor<Wymiar>::Wektor(const Wektor<Wymiar> &W)
+{
+  for(int i=0; i<Wymiar; i++)
+    {
+    Elem[i]=W[i];
+    }
+++IloscAktualna;
+++IloscOgolna;
+}
+
+/*!
  * \brief Destruktor dla wektora
  */
 template<int Wymiar>
 Wektor<Wymiar>::~Wektor()
 {
 --IloscAktualna;
+}
+
+/*!
+ * \brief Przeciazenie operatora przyrownania dla wektora
+ * \param[in] W - Wektor ktory ma zostac podstawiony
+ */
+template<int Wymiar>
+Wektor<Wymiar>& Wektor<Wymiar>::operator= (const Wektor<Wymiar> W)
+{
+  for(int i=0; i<Wymiar; i++)
+    {
+    Elem[i]=W[i];
+    }
+  return (*this);
 }
 
 /*!
