@@ -29,7 +29,7 @@ int main() {
     double Kat;                                             //Kat obrotu drona
     double Odleglosc;                                       //Odleglosc na jaka dron poleci
 
-    Sc.DodajDrona(1, {20,20,0}, 45, "Dron1");                //Dodanie dronow do scemy
+    Sc.DodajDrona(1, {20,20,0}, 0, "Dron1");                //Dodanie dronow do scemy
     Sc.DodajDrona(2, {20,100,0}, 0, "Dron2");
   
     Sc.DodajNazwePliku("../data/Dron1_Korpus.dat");         //Zapisanie nazwy plikow z brylami dronow
@@ -63,6 +63,7 @@ int main() {
         std::cout << "Ogolna Ilosc wektorow: " << Wektor3D::WezIloscOgolna() << std::endl;
         std::cout << std::endl << "Twoj wybor (m - menu) -> ";
         std::cin >> Opcja;
+        std::cin.ignore(100000,'\n');
         switch(Opcja)
           {
           case 'a':                                       //Wybor aktywnego drona
@@ -85,6 +86,7 @@ int main() {
                 {
                 std::cout << "Wybierz numer drona: ";
                 std::cin >> WybranyDron;
+                std::cin.ignore(100000,'\n');
                 if(WybranyDron <=0 || WybranyDron>ILOSC_DRONOW)
                   {
                   std::cout << "Zly numer drona. Sprobuj ponownie" << std::endl;
@@ -107,8 +109,10 @@ int main() {
             {
             std::cout << std::endl << "Podaj kierunek lotu (Kat):";
             std::cin >> Kat;
+            std::cin.ignore(100000,'\n');
             std::cout << "Podaj odleglosc lotu: ";
             std::cin >> Odleglosc;
+            std::cin.ignore(100000,'\n');
             std::cout << std::endl;
 
             while(Kat<=-360 || Kat>=360)            //Usuniecie okresow kata

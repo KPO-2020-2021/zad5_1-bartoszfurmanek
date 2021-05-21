@@ -7,6 +7,23 @@
  *\brief Definicja metod klasy Graniastoslup.
  */
 
+/*!
+ * \brief Operator przypisania dla Graniastoslupa
+ * \param[in] G - Graniastoslup, z wartosciami ktore maja zostac przypisane.
+ * \retval Graniastoslup z nowymi wartosciami.
+ */
+Graniastoslup& Graniastoslup::operator= (const Graniastoslup G)
+{
+  for(int i=0; i<24; i++)
+    {
+    Wierzcholek[i] = G[i];
+    }
+  Polozenie = G.WspolPolozenia();
+  KatOrientacji = G.Orientacja();
+  NazwaBryly = G.NazwaPlikuBryly();
+  NazwaBrylyWzorcowej = G.NazwaPlikuBrylyWzorcowej();
+  return(*this);
+}
 
 /*!
  * \brief Metoda służąca do indeksowania graniastoslupu.
@@ -96,29 +113,29 @@ Wektor3D& Graniastoslup::operator [](int Indeks)
 /*!
  *\brief Konstruktor bezparamateryczny graniastoslupu.
  */
-Graniastoslup::Graniastoslup()
+Graniastoslup::Graniastoslup():
+BrylaGeometryczna(TB_Graniastoslup), Polozenie({0,0,0}), KatOrientacji(0)
 {
-    KatOrientacji=0;
-    Polozenie={0,0,0};
-    for(int i=0; i<24; i++)
-        {
-        Wierzcholek[i]={0,0,0};
-        }
+  for(int i=0; i<24; i++)
+    {
+    Wierzcholek[i]={0,0,0};
+    }
 }
 
 /*!
  *\brief Konstruktor parametryczny graniastoslupnu.
  *  \param[in] WspolPolozenia - Wspolrzedna polozenia srodka podstawy graniastoslupa.
  *  \param[in] Kat - Kat orientacji graniastoslupu.
- *  \param[in] NazwaBryly - Nazwa graniastoslupu.
+ *  \param[in] NazwaBryly - Nazwa pliku z wspolrzednymi bryly finalnej.
+ *  \param[in] NazwaWzorca - Nazwa pliku z wspolrzednymi bryly wzorcowej.
  */
-Graniastoslup::Graniastoslup(Wektor3D WspolPolozenia, double Kat, std::string NazwaBryly)
+Graniastoslup::Graniastoslup(Wektor3D WspolPolozenia, double Kat, std::string Nazwa, std::string NazwaWzorca):
+BrylaGeometryczna(TB_Graniastoslup, Nazwa, NazwaWzorca), Polozenie(WspolPolozenia), KatOrientacji(Kat)
 {
 (*this).OdczytajBryleWzorcowa();
 (*this).Obrot(Kat, 'z');
 (*this).Translacja(WspolPolozenia);
-KatOrientacji=Kat;
-while(KatOrientacji<= -360 || KatOrientacji >= 360)
+while(KatOrientacji<= -360 || KatOrientacji >= 360)     //Usuniecie okresowosci kata.
   {
     if(KatOrientacji<= -360)
     {
@@ -130,9 +147,20 @@ while(KatOrientacji<= -360 || KatOrientacji >= 360)
     }    
   }
 Polozenie=WspolPolozenia;
-NazwaPlikuBryla=NazwaBryly + ".dat";
 }
 
+/*!
+ * \brief Konstruktor kopiujacy.
+ * \param[in] G - Graniastoslup ktory ma zostac skopiowany.
+ */
+Graniastoslup::Graniastoslup(const Graniastoslup &G):
+BrylaGeometryczna(TB_Graniastoslup, G.NazwaPlikuBryly(), G.NazwaPlikuBrylyWzorcowej()), Polozenie(G.WspolPolozenia()), KatOrientacji(G.Orientacja())
+{
+  for(int i=0; i<24; i++)
+    {
+    Wierzcholek[i] = G[i];
+    }
+}
 
 /*!
  * \brief Metoda służąca do porownywania graniastoslupow z dokladnoscia do 0,001.
@@ -247,30 +275,6 @@ void Graniastoslup::ZapisWspolrzednychDoStrumienia(std::ostream &StrmWy)const
 }
 
 
-
-/*!
- *\brief Zapis wspolrzednych do pliku.
- * Funkcja służy do zapisu wspolrzednych graniastoslupu do pliku w celu
- * narysowania i wyswietlenia go przez gnu-plot.
- * \param[in] sNazwaPliku - Nazwa pliku ktory ma przechowywac informacje o wierzcholkach
- * \retval True - jeżeli zapis uda sie pomyslnie.
- * \retval False - jezeli zapis sie nie uda..
- */
-bool Graniastoslup::ZapisWspolrzednychDoPliku(const std::string sNazwaPliku)const
-{
-  std::ofstream  StrmPlikowy;
-  StrmPlikowy.open(sNazwaPliku);
-  if (!StrmPlikowy.is_open())  {
-    std::cerr << "Operacja otwarcia do zapisu \"" << sNazwaPliku << "\"" << std::endl
-	 << " nie powiodla sie." << std::endl;
-    return false;
-  }
-  (*this).ZapisWspolrzednychDoStrumienia(StrmPlikowy);
-  StrmPlikowy.close();
-  return !StrmPlikowy.fail();
-}
-
-
 /*!
  * \brief Odczyt wspolrzednych graniastoslupu ze strumienia.
  * Metoda służy do odczytu wspolrzednych wierzcholków graniastoslupu z danego strumienia.
@@ -309,26 +313,6 @@ StrmWej >> Wierzcholek[22];
 StrmWej >> Wierzcholek[23];
 }
 
-/*!
- *\brief Odczyt wspolrzednych graniastoslupu z pliku.
- * \param[in] sNazwaPliku - Nazwa pliku ktory przechowuje wspolrzedne graniastoslupa
- * \retval True - jeżeli zapis uda sie pomyslnie.
- * \retval False - jezeli zapis sie nie uda.
- */
-bool Graniastoslup::OdczytWspolrzednychDoPliku(const std::string sNazwaPliku)
-{
-  std::ifstream  StrmPlikowy;
-  StrmPlikowy.open(sNazwaPliku);
-  if (!StrmPlikowy.is_open())  {
-    std::cerr << "Operacja otwarcia do odczytu \"" << sNazwaPliku << "\"" << std::endl
-	 << " nie powiodla sie." << std::endl;
-    return false;
-  }
-  (*this).OdczytWspolrzednychDoStrumienia(StrmPlikowy);
-  StrmPlikowy.close();
-  return !StrmPlikowy.fail();
-}
-
 
 /*!
  * \brief Metoda zapisuje wspolrzedne graniastoslupu do pliku
@@ -337,11 +321,16 @@ bool Graniastoslup::OdczytWspolrzednychDoPliku(const std::string sNazwaPliku)
  */
   bool Graniastoslup::ZapiszBryle()const
   {
-    if(!(*this).ZapisWspolrzednychDoPliku("../data/"+NazwaPlikuBryla))
-      {
-      return false;
-      }
-    return true;
+  std::ofstream  StrmPlikowy;
+  StrmPlikowy.open((*this).NazwaPlikuBryly());
+  if (!StrmPlikowy.is_open())  {
+    std::cerr << "Operacja otwarcia do zapisu \"" << (*this).NazwaPlikuBryly() << "\"" << std::endl
+	 << " nie powiodla sie." << std::endl;
+    return false;
+  }
+  (*this).ZapisWspolrzednychDoStrumienia(StrmPlikowy);
+  StrmPlikowy.close();
+  return !StrmPlikowy.fail();
   }
 
 
@@ -352,11 +341,18 @@ bool Graniastoslup::OdczytWspolrzednychDoPliku(const std::string sNazwaPliku)
  */
   bool Graniastoslup::OdczytajBryleWzorcowa()
   {
-    if(!(*this).OdczytWspolrzednychDoPliku("../BrylyWzorcowe/GraniastoslupWzorcowy.dat"))
-      {
-      return false;
-      }
-    return true;
+{
+  std::ifstream  StrmPlikowy;
+  StrmPlikowy.open((*this).NazwaPlikuBrylyWzorcowej());
+  if (!StrmPlikowy.is_open())  {
+    std::cerr << "Operacja otwarcia do odczytu \"" << (*this).NazwaPlikuBrylyWzorcowej() << "\"" << std::endl
+	 << " nie powiodla sie." << std::endl;
+    return false;
+  }
+  (*this).OdczytWspolrzednychDoStrumienia(StrmPlikowy);
+  StrmPlikowy.close();
+  return !StrmPlikowy.fail();
+}
   }
 
 /*!

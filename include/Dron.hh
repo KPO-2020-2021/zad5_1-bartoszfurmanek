@@ -7,6 +7,8 @@
 #include "Prostopadloscian.hh"
 #include "Graniastoslup.hh"
 #include "Wektor3D.hh"
+#include "lacze_do_gnuplota.hh"
+#include <unistd.h>
 
 
 
@@ -136,6 +138,17 @@ void Przemieszczenie(double Odleglosc);
  * i obroconymi).
  */
 bool UzyjWzorca();
+
+/*!
+ *\brief Metoda rysujaca trase, jaka drona bedzie sie przemieszczal.
+ */
+ bool RysujTrase(double Odleglosc, double Kat, PzG::LaczeDoGNUPlota  &LaczeDoGnuplota);
+
+/*!
+ *\brief Metoda wyswietlajaca w sposob aniomowany obrot drona o zadany kat,
+ * oraz jego przelot o zadana odleglosc.
+ */
+ bool PrzemiescDrona(double Odleglosc, double Kat, PzG::LaczeDoGNUPlota  &LaczeDoGnuplota);
 
 };
 

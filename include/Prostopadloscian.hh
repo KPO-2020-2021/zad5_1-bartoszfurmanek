@@ -6,6 +6,7 @@
 #include "Wektor.hh"
 #include "Macierz3x3.hh"
 #include "Macierz.hh"
+#include "BrylaGeometryczna.hh"
 #include <tgmath.h>
 #include <math.h>
 #include <iomanip>
@@ -29,7 +30,7 @@
  * do rysowania w gnuplocie.
  *
  */
-class Prostopadloscian {
+class Prostopadloscian: public BrylaGeometryczna {
 
 /*!
  * \brief Wierzcholki
@@ -60,14 +61,12 @@ class Prostopadloscian {
  */
   double KatOrientacji;
 
-/*!
- * \brief Nazwa pliku z rysowanym prostopadloscianem
- *
- * Zmienna pamietajaca nazwe pliku, ktory przechowuje wspolrzedne prostopadloscianu
- */
-  std::string NazwaPlikuBryla;
-
   public:
+
+/*!
+ * \brief Operator przypisania dla Prostopadloscianu
+ */
+  Prostopadloscian& operator= (const Prostopadloscian P);
 
 /*!
  * \brief Indeksowanie wierzcholkow prostopadloscianu.
@@ -113,7 +112,12 @@ class Prostopadloscian {
 /*!
  * \brief Konstruktor parametryczny.
  */
-  Prostopadloscian(Wektor3D WspolPolozenia, double Kat, std::string NazwaBryly);
+  Prostopadloscian(Wektor3D WspolPolozenia, double Kat, std::string Nazwa, std::string NazwaWzorca);
+
+/*!
+ * \brief Konstruktor kopiujacy.
+ */
+  Prostopadloscian(const Prostopadloscian &P);
 
 /*!
  * \brief Przeciazenie operatora porownania dla prostopadlocianu.
@@ -141,19 +145,9 @@ class Prostopadloscian {
   void TransformujDoUkladuGlobalnego();
 
 /*!
- *\brief Zapis wspolrzednych prostopadlocianu do pliku.
- */
-  bool ZapisWspolrzednychDoPliku(const std::string sNazwaPliku)const;
-
-/*!
  * \brief Zapis wspolrzednych prostopadloscianu do strumienia.
  */
   void ZapisWspolrzednychDoStrumienia(std::ostream &StrmWy)const;
-
-/*!
- *\brief Odczyt wspolrzednych prostopadloscianu z pliku.
- */
-  bool OdczytWspolrzednychDoPliku(const std::string sNazwaPliku);
 
 /*!
  * \brief Odczyt wspolrzednych prostopadloscianu ze strumienia.

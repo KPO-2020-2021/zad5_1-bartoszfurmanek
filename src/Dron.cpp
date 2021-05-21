@@ -81,11 +81,11 @@ Dron::Dron()
  */
 Dron::Dron(Wektor3D PolozenieDrona,double Kat, std::string Nazwa)
 {
-    Korpus = Prostopadloscian(PolozenieDrona, Kat ,Nazwa + "_Korpus");
-    Rotor[0] = Graniastoslup(Korpus[1], Kat, Nazwa+"_Rotor1");
-    Rotor[1] = Graniastoslup(Korpus[2], Kat, Nazwa+"_Rotor2");
-    Rotor[2] = Graniastoslup(Korpus[5], Kat, Nazwa+"_Rotor3");
-    Rotor[3] = Graniastoslup(Korpus[6], Kat, Nazwa+"_Rotor4");
+    Korpus = Prostopadloscian(PolozenieDrona, Kat, "../data/" + Nazwa + "_Korpus.dat", "../BrylyWzorcowe/ProstopadloscianWzorcowy.dat" );
+    Rotor[0] = Graniastoslup(Korpus[1], Kat, "../data/" + Nazwa+"_Rotor1.dat", "../BrylyWzorcowe/GraniastoslupWzorcowy.dat");
+    Rotor[1] = Graniastoslup(Korpus[2], Kat, "../data/" + Nazwa+"_Rotor2.dat", "../BrylyWzorcowe/GraniastoslupWzorcowy.dat");
+    Rotor[2] = Graniastoslup(Korpus[5], Kat, "../data/" + Nazwa+"_Rotor3.dat", "../BrylyWzorcowe/GraniastoslupWzorcowy.dat");
+    Rotor[3] = Graniastoslup(Korpus[6], Kat, "../data/" + Nazwa+"_Rotor4.dat", "../BrylyWzorcowe/GraniastoslupWzorcowy.dat");
     KatOrientacji=Kat;
     while(KatOrientacji<= -360 || KatOrientacji >= 360)
   {
@@ -303,3 +303,160 @@ bool Dron::UzyjWzorca()
     (*this).ZapiszBryly();
     return true;
 }
+
+
+/*!
+ *\brief Metoda rysujaca trase przelotu drona.
+ * Metoda rysuje trase polegajaca na podniesieniu sie drona,
+ * obrocie i przelocie o zadana odleglosc pod zadanym katem,
+ * a nastepnie opuszczeniu na plaszczyzne.
+ * \param[in] Odlegosc - Dlugosc przelotu drona.
+ * \param[in] Kat - kat obrotu drona.
+ * \param[in] LaczeDoGnuplota - Lacze do gnuplota, ktore ma rysowac trase
+ * \retval True, jezeli uda sie zapisac trase do pliku.
+ * \retval False, jezeli nie uda sie zapisaac trase do pliku.
+ */
+bool Dron::RysujTrase(double Odleglosc, double Kat, PzG::LaczeDoGNUPlota  &LaczeDoGnuplota)
+    {
+    Wektor3D PunktDocelowy = MacierzObrotu(((*this).Orientacja()+Kat), 'z') * Wektor3D{Odleglosc,0,0};     //Obliczenie punktu koncowego trasy
+    PunktDocelowy += (*this).WspolPolozenia();
+    std::ofstream  StrmPlikowy;
+    StrmPlikowy.open("../data/TrasaPrzelotu.dat");
+    if (!StrmPlikowy.is_open())  
+        {
+        std::cerr << "Operacja otwarcia do zapisu " << "TrasaPrzelotu.dat" << std::endl << " nie powiodla sie." << std::endl;
+        return false;
+        }
+    
+    StrmPlikowy << (*this).WspolPolozenia() << std::endl;
+    StrmPlikowy << ((*this).WspolPolozenia() + Wektor3D{0,0,60}) << std::endl;
+    StrmPlikowy << (PunktDocelowy + Wektor3D{0,0,60}) << std::endl;
+    StrmPlikowy << PunktDocelowy << std::endl;    
+    
+    StrmPlikowy.close();
+
+    LaczeDoGnuplota.DodajNazwePliku("../data/TrasaPrzelotu.dat");
+    LaczeDoGnuplota.Rysuj();
+
+
+    return true;
+    }
+
+/*!
+ *\brief Metoda realizuje przelot aktywnego drona.
+ * Jego przemieszenie odbywa sie w sposob animowany.
+ * Dron podnosi sie, obraca o odpowiedni kat, przelatuje
+ * o zadana odleglosc (Podczas przelotu jego rotory odpowiednio
+ * wiruja), a na koniec opuszcza sie na plaszczyzne.
+ * \param[in] Odlegosc - Dlugosc przelotu drona.
+ * \param[in] Kat - kat obrotu drona.
+ * \param[in] LaczeDoGnuplota - Lacze do gnuplota, ktore rysowac ruch drona
+ * \retval True, jezeli operacja wykona sie poprawnie
+ * \retval False, jezeli podczas operacji wystapia bledy
+ */
+bool Dron::PrzemiescDrona(double Odleglosc, double Kat, PzG::LaczeDoGNUPlota  &LaczeDoGnuplota)
+    {
+        int i=0;
+        std::cout <<std::endl << "Rysowanie trasy..." << std::endl;     //Rysowanie trasy
+        if(!(*this).RysujTrase(Odleglosc, Kat, LaczeDoGnuplota))
+            {
+            throw std::runtime_error("Blad zapisu trasy");
+            return false;
+            }
+        usleep(3000000);
+
+        std::cout << std::endl << "Podnoszonie drona..." << std::endl;  //Podnoszenie drona
+        for(i=0; i<60; i++)
+            {
+            (*this).Wzniesienie(1);
+            (*this).ObrotRotora(0,10);
+            (*this).ObrotRotora(1,-10);
+            (*this).ObrotRotora(2,-10);
+            (*this).ObrotRotora(3,10);
+            if(!(*this).ZapiszBryly())
+                {
+                return false;
+                }
+            LaczeDoGnuplota.Rysuj();
+            usleep(40000);
+            }
+        if(!(*this).UzyjWzorca())
+            {
+            return false;
+            }
+
+
+        std::cout << std::endl << "Obrot drona..."  << std::endl;       //Obrot drona;
+        for(i=0; i<abs(Kat); i++)
+            {
+            if(Kat>0)
+                {
+                (*this).Obrot(1);
+                }
+            else
+                {
+                (*this).Obrot(-1);
+                }
+            (*this).ObrotRotora(0,10);
+            (*this).ObrotRotora(1,-10);
+            (*this).ObrotRotora(2,-10);
+            (*this).ObrotRotora(3,10);
+            if(!(*this).ZapiszBryly())
+                {
+                return false;
+                }
+            LaczeDoGnuplota.Rysuj();
+            usleep(40000);
+            }
+        if(!(*this).UzyjWzorca())
+            {
+            return false;
+            }
+
+        std::cout << std::endl << "Lot Drona..."  << std::endl;       //Lot drona;
+        for(i=0; i<Odleglosc; i++)
+            {
+            (*this).Przemieszczenie(1);
+            (*this).ObrotRotora(0,10);
+            (*this).ObrotRotora(1,-10);
+            (*this).ObrotRotora(2,-10);
+            (*this).ObrotRotora(3,10);
+            if(!(*this).ZapiszBryly())
+                {
+                return false;
+                }
+            LaczeDoGnuplota.Rysuj();
+            usleep(40000);
+            }
+        if(!(*this).UzyjWzorca())
+            {
+            return false;
+            }
+
+        std::cout << std::endl << "Opadanie drona..." << std::endl;  //Opadanie
+        for(i=0; i<60; i++)
+            {
+            (*this).Opadanie(1);
+            (*this).ObrotRotora(0,7.5);
+            (*this).ObrotRotora(1,-7.5);
+            (*this).ObrotRotora(2,-7.5);
+            (*this).ObrotRotora(3,7.5);
+            if(!(*this).ZapiszBryly())
+                {
+                return false;
+                }
+            LaczeDoGnuplota.Rysuj();
+            usleep(60000);
+            }
+        if(!(*this).UzyjWzorca())
+            {
+            return false;
+            }
+
+        std::cout<< std::endl << "Usuwanie trasy..." << std::endl;     //Usuwanie trasy
+        LaczeDoGnuplota.UsunOstatniaNazwe();
+        LaczeDoGnuplota.Rysuj();
+        usleep(3000000);
+
+        return true;
+    }

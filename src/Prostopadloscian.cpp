@@ -7,6 +7,24 @@
  *\brief Definicja metod klasy Prostopadloscian.
  */
 
+/*!
+ * \brief Operator przypisania dla Prostopadloscianu
+ * \param[in] P - Prostopadloscian, z wartosciami ktore maja zostac przypisane.
+ * \retval Prostopadloscian z nowymi wartosciami.
+ */
+Prostopadloscian& Prostopadloscian::operator= (const Prostopadloscian P)
+{
+  for(int i=0; i<16; i++)
+    {
+    Wierzcholek[i] = P[i];
+    }
+  Polozenie = P.WspolPolozenia();
+  KatOrientacji = P.Orientacja();
+  NazwaBryly = P.NazwaPlikuBryly();
+  NazwaBrylyWzorcowej = P.NazwaPlikuBrylyWzorcowej();
+  return(*this);
+}
+
 
 /*!
  * \brief Metoda służąca do indeksowania prostopadloscianu.
@@ -94,28 +112,28 @@ Wektor3D& Prostopadloscian::operator [](int Indeks)
 /*!
  *\brief Konstruktor bezparamateryczny prostopadloscianu.
  */
-Prostopadloscian::Prostopadloscian()
+Prostopadloscian::Prostopadloscian():
+BrylaGeometryczna(TB_Prostopadloscian), Polozenie({0,0,0}), KatOrientacji(0)
 {
-    KatOrientacji=0;
-    Polozenie={0,0,0};
-    for(int i=0; i<16; i++)
-        {
-        Wierzcholek[i]={0,0,0};
-        }
+  for(int i=0; i<16; i++)
+    {
+    Wierzcholek[i]={0,0,0};
+    }
 }
 
 /*!
  *\brief Konstruktor parametryczny prostopadloscianu.
  *  \param[in] WspolPolozenia - Wspolrzedne polozenia srodka prostopadloscianu
  *  \param[in] Kat - Kat orientacji prostopadloscianu.
- *  \param[in] NazwaBryly - Nazwa prostopadloscianu.
+ *  \param[in] NazwaBryly - Nazwa pliku z wspolrzednymi bryly finalnej.
+ *  \param[in] NazwaWzorca - Nazwa pliku z wspolrzednymi bryly wzorcowej.
  */
-Prostopadloscian::Prostopadloscian(Wektor3D WspolPolozenia, double Kat, std::string NazwaBryly)
+Prostopadloscian::Prostopadloscian(Wektor3D WspolPolozenia, double Kat, std::string Nazwa, std::string NazwaWzorca):
+BrylaGeometryczna(TB_Prostopadloscian, Nazwa, NazwaWzorca), Polozenie(WspolPolozenia), KatOrientacji(Kat)
 {
 (*this).OdczytajBryleWzorcowa();
 (*this).Obrot(Kat, 'z');
 (*this).Translacja(WspolPolozenia);
-KatOrientacji=Kat;
 while(KatOrientacji<= -360 || KatOrientacji >= 360)     //Usuniecie okresowosci kata.
   {
     if(KatOrientacji<= -360)
@@ -128,8 +146,19 @@ while(KatOrientacji<= -360 || KatOrientacji >= 360)     //Usuniecie okresowosci 
     }    
   }
 Polozenie=WspolPolozenia;
-NazwaPlikuBryla=NazwaBryly + ".dat";
+}
 
+/*!
+ * \brief Konstruktor kopiujacy.
+ * \param[in] P - Prostopadloscian ktory ma zostac skopiowany.
+ */
+Prostopadloscian::Prostopadloscian(const Prostopadloscian &P):
+BrylaGeometryczna(TB_Prostopadloscian, P.NazwaPlikuBryly(), P.NazwaPlikuBrylyWzorcowej()), Polozenie(P.WspolPolozenia()), KatOrientacji(P.Orientacja())
+{
+  for(int i=0; i<16; i++)
+    {
+    Wierzcholek[i] = P[i];
+    }
 }
 
 
@@ -239,29 +268,6 @@ void Prostopadloscian::ZapisWspolrzednychDoStrumienia(std::ostream &StrmWy)const
 
 
 /*!
- *\brief Zapis wspolrzednych  do pliku.
- * Funkcja służy do zapisu wspolrzednych prostopadloscianu od pliku w celu
- * narysowania i wyswietlenia go przez gnu-plot. 
- *  \param[in] sNazwaPliku - Nazwa pliku ktory ma przechowywac informacje o wierzcholkach
- * \retval True - jeżeli zapis uda sie pomyslnie.
- * \retval False - jezeli zapis sie nie uda..
- */
-bool Prostopadloscian::ZapisWspolrzednychDoPliku(const std::string sNazwaPliku)const
-{
-  std::ofstream  StrmPlikowy;
-  StrmPlikowy.open(sNazwaPliku);
-  if (!StrmPlikowy.is_open())  {
-    std::cerr << "Operacja otwarcia do zapisu \"" << sNazwaPliku << "\"" << std::endl
-	 << " nie powiodla sie." << std::endl;
-    return false;
-  }
-  (*this).ZapisWspolrzednychDoStrumienia(StrmPlikowy);
-  StrmPlikowy.close();
-  return !StrmPlikowy.fail();
-}
-
-
-/*!
  * \brief Odczyt wspolrzednych  prostopadloscianu ze strumienia.
  * Metoda służy do odczytu wspolrzednych wierzcholków prostopadloscianu z danego strumienia.
  *  \param[in] StrmWej - Strumien z ktorego wierzcholki maja zostac wczytane.
@@ -289,26 +295,6 @@ StrmWej >> Wierzcholek[14];
 StrmWej >> Wierzcholek[15];
 }
 
-/*!
- *\brief Odczyt wspolrzednych prostopadloscianu z pliku. 
- * \param[in] sNazwaPliku - Nazwa pliku ktory ma przechowywac informacje o wierzcholkach
- * \retval True - jeżeli zapis uda sie pomyslnie.
- * \retval False - jezeli zapis sie nie uda.
- */
-bool Prostopadloscian::OdczytWspolrzednychDoPliku(const std::string sNazwaPliku)
-{
-  std::ifstream  StrmPlikowy;
-  StrmPlikowy.open(sNazwaPliku);
-  if (!StrmPlikowy.is_open())  {
-    std::cerr << "Operacja otwarcia do odczytu \"" << sNazwaPliku << "\"" << std::endl
-	 << " nie powiodla sie." << std::endl;
-    return false;
-  }
-  (*this).OdczytWspolrzednychDoStrumienia(StrmPlikowy);
-  StrmPlikowy.close();
-  return !StrmPlikowy.fail();
-}
-
 
 /*!
  * \brief Metoda zapisuje wspolrzedne prostopadloscianu do pliku
@@ -317,11 +303,16 @@ bool Prostopadloscian::OdczytWspolrzednychDoPliku(const std::string sNazwaPliku)
  */
   bool Prostopadloscian::ZapiszBryle()const
   {
-    if(!(*this).ZapisWspolrzednychDoPliku("../data/"+NazwaPlikuBryla))
-      {
-      return false;
-      }
-    return true;
+  std::ofstream  StrmPlikowy;
+  StrmPlikowy.open((*this).NazwaPlikuBryly());
+  if (!StrmPlikowy.is_open())  {
+    std::cerr << "Operacja otwarcia do zapisu \"" << (*this).NazwaPlikuBryly() << "\"" << std::endl
+	 << " nie powiodla sie." << std::endl;
+    return false;
+  }
+  (*this).ZapisWspolrzednychDoStrumienia(StrmPlikowy);
+  StrmPlikowy.close();
+  return !StrmPlikowy.fail();
   }
 
 
@@ -332,11 +323,16 @@ bool Prostopadloscian::OdczytWspolrzednychDoPliku(const std::string sNazwaPliku)
  */
   bool Prostopadloscian::OdczytajBryleWzorcowa()
   {
-    if(!(*this).OdczytWspolrzednychDoPliku("../BrylyWzorcowe/ProstopadloscianWzorcowy.dat"))
-      {
-      return false;
-      }
-    return true;
+  std::ifstream  StrmPlikowy;
+  StrmPlikowy.open((*this).NazwaPlikuBrylyWzorcowej());
+  if (!StrmPlikowy.is_open())  {
+    std::cerr << "Operacja otwarcia do odczytu \"" << (*this).NazwaPlikuBrylyWzorcowej() << "\"" << std::endl
+	 << " nie powiodla sie." << std::endl;
+    return false;
+  }
+  (*this).OdczytWspolrzednychDoStrumienia(StrmPlikowy);
+  StrmPlikowy.close();
+  return !StrmPlikowy.fail();
   }
 
 /*!

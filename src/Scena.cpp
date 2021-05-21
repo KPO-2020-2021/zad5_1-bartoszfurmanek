@@ -98,156 +98,20 @@ Dron& Scena::AktywnyDron()
 }
 
 /*!
- *\brief Metoda rysujaca trase przelotu drona.
- * Metoda rysuje trase polegajaca na podniesieniu sie drona,
- * obrocie i przelocie o zadana odleglosc pod zadanym katem,
- * a nastepnie opuszczeniu na plaszczyzne.
- * \param[in] Odlegosc - Dlugosc przelotu drona.
- * \param[in] Kat - kat obrotu drona.
- * \retval True, jezeli uda sie zapisac trase do pliku.
- * \retval False, jezeli nie uda sie zapisaac trase do pliku.
- */
-bool Scena::RysujTrase(double Odleglosc, double Kat)
-    {
-    Wektor3D PunktDocelowy = MacierzObrotu(((*this).AktywnyDron().Orientacja()+Kat), 'z') * Wektor3D{Odleglosc,0,0};     //Obliczenie punktu koncowego trasy
-    PunktDocelowy += (*this).AktywnyDron().WspolPolozenia();
-    std::ofstream  StrmPlikowy;
-    StrmPlikowy.open("../data/TrasaPrzelotu.dat");
-    if (!StrmPlikowy.is_open())  
-        {
-        std::cerr << "Operacja otwarcia do zapisu " << "TrasaPrzelotu.dat" << std::endl << " nie powiodla sie." << std::endl;
-        return false;
-        }
-    
-    StrmPlikowy << (*this).AktywnyDron().WspolPolozenia() << std::endl;
-    StrmPlikowy << ((*this).AktywnyDron().WspolPolozenia() + Wektor3D{0,0,60}) << std::endl;
-    StrmPlikowy << (PunktDocelowy + Wektor3D{0,0,60}) << std::endl;
-    StrmPlikowy << PunktDocelowy << std::endl;    
-    
-    StrmPlikowy.close();
-
-    Lacze.DodajNazwePliku("../data/TrasaPrzelotu.dat");
-    Lacze.Rysuj();
-
-
-    return true;
-    }
-
-/*!
- *\brief Metoda realizuje przelot aktywnego drona.
- * Jego przemieszenie odbywa sie w sposob animowany.
- * Dron podnosi sie, obraca o odpowiedni kat, przelatuje
- * o zadana odleglosc (Podczas przelotu jego rotory odpowiednio
- * wiruja), a na koniec opuszcza sie na plaszczyzne.
- * \param[in] Odlegosc - Dlugosc przelotu drona.
- * \param[in] Kat - kat obrotu drona.
+ *\brief Metoda wyswietlajaca w sposob aniomowany obrot drona o zadany kat,
+ * oraz jego przelot o zadana odleglosc.
+ * \param[in] Odleglosc - Odleglosc o jaka dron ma przeleciec.
+ * \param[in] Kat - Kat o jaki dron ma sie obrocic.
  * \retval True, jezeli operacja wykona sie poprawnie
  * \retval False, jezeli podczas operacji wystapia bledy
  */
-bool Scena::PrzemiescDrona(double Odleglosc, double Kat)
+ bool Scena::PrzemiescDrona(double Odleglosc, double Kat)
+ {
+ if(!(*this).AktywnyDron().PrzemiescDrona(Odleglosc, Kat, Lacze))
     {
-        int i=0;
-        std::cout <<std::endl << "Rysowanie trasy..." << std::endl;     //Rysowanie trasy
-        if(!(*this).RysujTrase(Odleglosc, Kat))
-            {
-            throw std::runtime_error("Blad zapisu trasy");
-            return false;
-            }
-        usleep(3000000);
-
-        std::cout << std::endl << "Podnoszonie drona..." << std::endl;  //Podnoszenie drona
-        for(i=0; i<60; i++)
-            {
-            (*this).AktywnyDron().Wzniesienie(1);
-            (*this).AktywnyDron().ObrotRotora(0,10);
-            (*this).AktywnyDron().ObrotRotora(1,-10);
-            (*this).AktywnyDron().ObrotRotora(2,-10);
-            (*this).AktywnyDron().ObrotRotora(3,10);
-            if(!(*this).AktywnyDron().ZapiszBryly())
-                {
-                return false;
-                }
-            Lacze.Rysuj();
-            usleep(40000);
-            }
-        if(!(*this).AktywnyDron().UzyjWzorca())
-            {
-            return false;
-            }
-
-
-        std::cout << std::endl << "Obrot drona..."  << std::endl;       //Obrot drona;
-        for(i=0; i<abs(Kat); i++)
-            {
-            if(Kat>0)
-                {
-                (*this).AktywnyDron().Obrot(1);
-                }
-            else
-                {
-                (*this).AktywnyDron().Obrot(-1);
-                }
-            (*this).AktywnyDron().ObrotRotora(0,10);
-            (*this).AktywnyDron().ObrotRotora(1,-10);
-            (*this).AktywnyDron().ObrotRotora(2,-10);
-            (*this).AktywnyDron().ObrotRotora(3,10);
-            if(!(*this).AktywnyDron().ZapiszBryly())
-                {
-                return false;
-                }
-            Lacze.Rysuj();
-            usleep(40000);
-            }
-        if(!(*this).AktywnyDron().UzyjWzorca())
-            {
-            return false;
-            }
-
-        std::cout << std::endl << "Lot Drona..."  << std::endl;       //Lot drona;
-        for(i=0; i<Odleglosc; i++)
-            {
-            (*this).AktywnyDron().Przemieszczenie(1);
-            (*this).AktywnyDron().ObrotRotora(0,10);
-            (*this).AktywnyDron().ObrotRotora(1,-10);
-            (*this).AktywnyDron().ObrotRotora(2,-10);
-            (*this).AktywnyDron().ObrotRotora(3,10);
-            if(!(*this).AktywnyDron().ZapiszBryly())
-                {
-                return false;
-                }
-            Lacze.Rysuj();
-            usleep(40000);
-            }
-        if(!(*this).AktywnyDron().UzyjWzorca())
-            {
-            return false;
-            }
-
-        std::cout << std::endl << "Opadanie drona..." << std::endl;  //Opadanie
-        for(i=0; i<60; i++)
-            {
-            (*this).AktywnyDron().Opadanie(1);
-            (*this).AktywnyDron().ObrotRotora(0,7.5);
-            (*this).AktywnyDron().ObrotRotora(1,-7.5);
-            (*this).AktywnyDron().ObrotRotora(2,-7.5);
-            (*this).AktywnyDron().ObrotRotora(3,7.5);
-            if(!(*this).AktywnyDron().ZapiszBryly())
-                {
-                return false;
-                }
-            Lacze.Rysuj();
-            usleep(60000);
-            }
-        if(!(*this).AktywnyDron().UzyjWzorca())
-            {
-            return false;
-            }
-
-        std::cout<< std::endl << "Usuwanie trasy..." << std::endl;     //Usuwanie trasy
-        Lacze.UsunOstatniaNazwe();
-        Lacze.Rysuj();
-        usleep(3000000);
-
-        return true;
+    return false;
     }
+return true;
+ }
+ 
 

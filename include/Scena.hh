@@ -3,7 +3,6 @@
 
 #include "Dron.hh"
 #include "lacze_do_gnuplota.hh"
-#include <unistd.h>
 
 #define ILOSC_DRONOW 2
 
@@ -78,11 +77,6 @@
  *\brief Metoda uzyskujaca dostep do aktywnego drona.
  */
  Dron& AktywnyDron();
-
-/*!
- *\brief Metoda rysujaca trase, jaka drona bedzie sie przemieszczal.
- */
- bool RysujTrase(double Odleglosc, double Kat);
 
 /*!
  *\brief Metoda wyswietlajaca w sposob aniomowany obrot drona o zadany kat,

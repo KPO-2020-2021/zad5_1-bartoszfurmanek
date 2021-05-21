@@ -6,6 +6,7 @@
 #include "Wektor.hh"
 #include "Macierz3x3.hh"
 #include "Macierz.hh"
+#include "BrylaGeometryczna.hh"
 #include <tgmath.h>
 #include <math.h>
 #include <iomanip>
@@ -28,7 +29,7 @@
  * Prostopadloscian mozna przesuwac oraz obracac. Kazdy prostopadloscian 
  * posiada plik ze wspolrzednymi bryly, dostosowanych do rysowania w gnuplocie.
  */
-class Graniastoslup {
+class Graniastoslup: public BrylaGeometryczna {
 
 /*!
  * \brief Wierzcholki
@@ -60,14 +61,12 @@ class Graniastoslup {
  */
   double KatOrientacji;
 
-/*!
- * \brief Nazwa pliku z rysowanym graniastoslupem
- *
- * Zmienna pamietajaca nazwe pliku, ktory przechowuje wspolrzedne graniastoslupa
- */
-  std::string NazwaPlikuBryla;
-
   public:
+
+/*!
+ * \brief Operator przypisania dla Graniastoslup
+ */
+  Graniastoslup& operator= (const Graniastoslup G);
 
 /*!
  * \brief Indeksowanie wspolrzednych graniastoslupa.
@@ -113,7 +112,12 @@ class Graniastoslup {
 /*!
  * \brief Konstruktor parametryczny.
  */
-  Graniastoslup(Wektor3D WspolPolozenia, double Kat, std::string NazwaBryly);
+  Graniastoslup(Wektor3D WspolPolozenia, double Kat, std::string NazwaBryly, std::string NazwaWzorca);
+
+/*!
+ * \brief Konstruktor kopiujacy.
+ */
+  Graniastoslup(const Graniastoslup &G);
 
 /*!
  * \brief Przeciazenie operatora porownania dla graniastoslupa.
@@ -141,19 +145,9 @@ class Graniastoslup {
   void TransformujDoUkladuGlobalnego();
 
 /*!
- *\brief Zapis wspolrzednych do pliku.
- */
-  bool ZapisWspolrzednychDoPliku(const std::string sNazwaPliku)const;
-
-/*!
  * \brief Zapis wspolrzednych do strumienia.
  */
   void ZapisWspolrzednychDoStrumienia(std::ostream &StrmWy)const;
-
-/*!
- *\brief Odczyt wspolrzednych do pliku.
- */
-  bool OdczytWspolrzednychDoPliku(const std::string sNazwaPliku);
 
 /*!
  * \brief Odczyt wspolrzednych ze strumienia.
