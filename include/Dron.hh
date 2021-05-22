@@ -140,15 +140,26 @@ void Przemieszczenie(double Odleglosc);
 bool UzyjWzorca();
 
 /*!
- *\brief Metoda rysujaca trase, jaka drona bedzie sie przemieszczal.
+ *\brief Metoda rysujaca trase, jaka drona bedzie sie przemieszczal podczas prostego ruchu.
  */
  bool RysujTrase(double Odleglosc, double Kat, PzG::LaczeDoGNUPlota  &LaczeDoGnuplota);
+
+/*!
+ *\brief Metoda rysujaca trase, jaka drona bedzie sie przemieszczal podczas ruchu po okregu.
+ */
+ bool RysujTrasePoOkregu(double Promien, PzG::LaczeDoGNUPlota  &LaczeDoGnuplota);
 
 /*!
  *\brief Metoda wyswietlajaca w sposob aniomowany obrot drona o zadany kat,
  * oraz jego przelot o zadana odleglosc.
  */
  bool PrzemiescDrona(double Odleglosc, double Kat, PzG::LaczeDoGNUPlota  &LaczeDoGnuplota);
+
+/*!
+ *\brief Metoda wyswietlajaca w sposob aniomowany ruch drona po okregu o
+ * zadanym promieniu.
+ */
+ bool RuchPoOkregu(double Promien, PzG::LaczeDoGNUPlota  &LaczeDoGnuplot);
 
 };
 

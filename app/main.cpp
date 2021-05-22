@@ -54,6 +54,7 @@ int main() {
     std::cout << std::endl << std::endl;
     std::cout << "a - wybierz aktywnego drona" << std::endl;
     std::cout << "p - zadaj parametry przelotu" << std::endl;
+    std::cout << "o - zadaj parametry lotu po okregu" << std::endl;
     std::cout << "m - wyswietl menu" << std::endl;
     std::cout << std::endl << "k - koniec programu"<< std::endl;
     
@@ -129,11 +130,22 @@ int main() {
             Sc.PrzemiescDrona(Odleglosc, Kat);
             break;
             }
+          case 'o':                                       //Przelot drona
+            {
+            std::cout << "Podaj promien okregu po ktorym ma przeleciec dron: ";
+            std::cin >> Odleglosc;
+            std::cin.ignore(100000,'\n');
+            std::cout << std::endl;
+
+            Sc.RuchPoOkregu(Odleglosc);
+            break;
+            }
           case 'm':
             {
             std::cout << std::endl << std::endl;
             std::cout << "a - wybierz aktywnego drona" << std::endl;
             std::cout << "p - zadaj parametry przelotu" << std::endl;
+            std::cout << "o - zadaj parametry lotu po okregu" << std::endl;
             std::cout << "m - wyswietl menu" << std::endl;
             std::cout << std::endl << "k - koniec programu"<< std::endl << std::endl;
             break;

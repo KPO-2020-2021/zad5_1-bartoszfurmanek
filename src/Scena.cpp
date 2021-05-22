@@ -98,7 +98,7 @@ Dron& Scena::AktywnyDron()
 }
 
 /*!
- *\brief Metoda wyswietlajaca w sposob aniomowany obrot drona o zadany kat,
+ *\brief Metoda wyswietlajaca w sposob aniomowany obrot aktywnego drona o zadany kat,
  * oraz jego przelot o zadana odleglosc.
  * \param[in] Odleglosc - Odleglosc o jaka dron ma przeleciec.
  * \param[in] Kat - Kat o jaki dron ma sie obrocic.
@@ -108,6 +108,21 @@ Dron& Scena::AktywnyDron()
  bool Scena::PrzemiescDrona(double Odleglosc, double Kat)
  {
  if(!(*this).AktywnyDron().PrzemiescDrona(Odleglosc, Kat, Lacze))
+    {
+    return false;
+    }
+return true;
+ }
+
+/*!
+ *\brief Metoda wyswietlajaca w sposob aniomowany ruch po okregu aktywnego drona.
+ * \param[in] Promien - Promien okregu, po jakim dron ma sie przemieszczac.
+ * \retval True, jezeli operacja wykona sie poprawnie
+ * \retval False, jezeli podczas operacji wystapia bledy
+ */
+bool Scena::RuchPoOkregu(double Promien)
+ {
+ if(!(*this).AktywnyDron().RuchPoOkregu(Promien, Lacze))
     {
     return false;
     }

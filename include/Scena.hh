@@ -79,10 +79,15 @@
  Dron& AktywnyDron();
 
 /*!
- *\brief Metoda wyswietlajaca w sposob aniomowany obrot drona o zadany kat,
+ *\brief Metoda wyswietlajaca w sposob aniomowany obrot aktynwego drona o zadany kat,
  * oraz jego przelot o zadana odleglosc.
  */
  bool PrzemiescDrona(double Odleglosc, double Kat);
+
+/*!
+ *\brief Metoda wyswietlajaca w sposob aniomowany ruchh po okregu aktywnego drona.
+ */
+ bool RuchPoOkregu(double Promien);
  };
 
 
